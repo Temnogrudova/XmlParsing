@@ -1,7 +1,6 @@
 package com.example.mondaytest.repos
 
 import androidx.lifecycle.LiveData
-import com.example.mondaytest.models.Article
 import com.example.mondaytest.models.Feed
 
 interface Repository {

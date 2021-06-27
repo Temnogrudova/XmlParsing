@@ -5,11 +5,8 @@ import android.app.Activity
 import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.mondaytest.models.Article
 import com.example.mondaytest.repos.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
@@ -27,14 +24,14 @@ class ItemsViewModel  @Inject constructor(
     SwitchMap on the other hand only mapping the most recent value at a time to reduce unnecessary compute.
      */
 
-    val feedLiveData =  Transformations.map(repository.feedLiveData) { items ->
-        items?.articleList ?: listOf()
+    val feedLiveData: LiveData<List<Article>> =  Transformations.map(repository.feedLiveData) { items ->
+        items?.articleList
     }
-    val sportLiveData =  Transformations.map(repository.sportLiveData) { items ->
-        items?.articleList ?: listOf()
+    val sportLiveData: LiveData<List<Article>> =  Transformations.map(repository.sportLiveData) { items ->
+        items?.articleList
     }
-    val cultureLiveData =  Transformations.map(repository.cultureLiveData) { items ->
-        items?.articleList ?: listOf()
+    val cultureLiveData: LiveData<List<Article>> =  Transformations.map(repository.cultureLiveData) { items ->
+        items?.articleList
     }
 
     val errorLiveData: MutableLiveData<String> = MutableLiveData()
