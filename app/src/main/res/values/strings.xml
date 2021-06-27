@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ZemingoTest</string>
+    <string name="name">name: %s</string>
+    <string name="date_and_time">date and time: %s</string>
+    <string name="open_feed">open feed</string>
+    <string name="tab_cars">Cars</string>
+    <string name="tab_sport_culture">Sport and Culture</string>
+    <string name="desc_tab_cars">Tab by cars</string>
+    <string name="desc_tab_sport_culture">Tab by sport and culture</string>
+</resources>
