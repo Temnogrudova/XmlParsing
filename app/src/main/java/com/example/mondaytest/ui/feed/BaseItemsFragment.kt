@@ -17,14 +17,14 @@ import com.example.mondaytest.ui.profile.ProfileViewModel
 
 abstract class BaseItemsFragment: Fragment() {
     protected val listViewModel: ItemsViewModel by viewModels()
-    protected val profileViewModel: ProfileViewModel by viewModels()
+    protected val profileViewModel: ProfileViewModel by activityViewModels()
     protected lateinit var binding: FragmentItemsBinding
 
     private lateinit var mainHandler: Handler
     private val refreshTask = object : Runnable {
         override fun run() {
             refresh()
-            mainHandler.postDelayed(this, 5000)
+            mainHandler.postDelayed(this, TIMEOUT)
         }
     }
 
@@ -87,5 +87,9 @@ abstract class BaseItemsFragment: Fragment() {
         if (this::binding.isInitialized) {
             binding.progressBar.visibility = View.VISIBLE
         }
+    }
+
+    companion object {
+        const val TIMEOUT: Long = 5000
     }
 }

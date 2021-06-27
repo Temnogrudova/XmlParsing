@@ -14,7 +14,6 @@ data class Feed  @JvmOverloads constructor (
     @param:Element(name = "title")
     @field:Path("channel")
     @param:Path("channel")
-    //@Path("channel")
     var channelTitle: String? = null,
 
     /**
@@ -28,7 +27,6 @@ data class Feed  @JvmOverloads constructor (
     @param:ElementList(name = "item", inline = true, required = false)
     @field:Path("channel")
     @param:Path("channel")
-    // @Path("channel")
     var articleList: List<Article>? =
         null
 )

@@ -14,7 +14,7 @@ class ItemsListAdapter(
 ) : RecyclerView.Adapter<ItemsListAdapter.BaseViewHolder>() {
 
     interface InteractionListener {
-        fun onItemClick(v: View, url: Article?)
+        fun onItemClick(v: View, feed: Article?)
     }
 
     private lateinit var inflater: LayoutInflater

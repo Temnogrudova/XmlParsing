@@ -43,6 +43,7 @@ open class ProfileFragment: Fragment() {
         }
     }
 
+
     private fun initObserves() {
         profileViewModel.lastSeenFeedTitle.observe(this, lastSeenFeedTitleObserver)
     }

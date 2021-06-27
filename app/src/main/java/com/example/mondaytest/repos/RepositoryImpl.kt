@@ -1,14 +1,9 @@
 package com.example.mondaytest.repos
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.PagingData
-import com.example.mondaytest.models.Article
 import com.example.mondaytest.models.Feed
 import com.example.mondaytest.network.WebService
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import kotlinx.coroutines.flow.merge
 import javax.inject.Inject
 
 @ActivityRetainedScoped
@@ -38,14 +33,11 @@ class RepositoryImpl  @Inject constructor(
                 return   cultureLiveData.postValue(feed)
             }
         }
-
     }
 
-
-
     companion object {
-        val CARS_ID = "3220"
-        val SPORTS_ID = "2605"
-        val CULTURE_ID = "3317"
+        const val CARS_ID = "3220"
+        const val SPORTS_ID = "2605"
+        const val CULTURE_ID = "3317"
     }
 }

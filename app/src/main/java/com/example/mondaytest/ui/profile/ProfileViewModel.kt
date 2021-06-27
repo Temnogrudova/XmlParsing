@@ -10,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel  @Inject constructor(): ViewModel()
 {
-     var lastSeenFeedTitle: MutableLiveData<String> = MutableLiveData()
+    var lastSeenFeedTitle: MutableLiveData<String> = MutableLiveData()
 
     fun setLastSeenFeedTitle(title: String) {
         lastSeenFeedTitle.value =title

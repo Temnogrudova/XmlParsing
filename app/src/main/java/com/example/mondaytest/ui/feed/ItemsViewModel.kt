@@ -44,7 +44,6 @@ class ItemsViewModel  @Inject constructor(
             try {
                 repository.fetchFeed(iId = iId)
             } catch (error: Throwable) {
-                error.message?.let { Log.e("tag", it) }
                 errorLiveData.value = iId
             }
         }
