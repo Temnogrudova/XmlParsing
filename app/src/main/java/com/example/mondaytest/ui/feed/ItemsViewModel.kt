@@ -36,18 +36,18 @@ class ItemsViewModel  @Inject constructor(
 
     val errorLiveData: MutableLiveData<String> = MutableLiveData()
 
-    fun fetchFeed(iId: String) {
+    fun fetchFeed(id: String) {
         viewModelScope.launch {
             try {
-                repository.fetchFeed(iId = iId)
+                repository.fetchFeed(id = id)
             } catch (error: Throwable) {
-                errorLiveData.value = iId
+                errorLiveData.value = id
             }
         }
     }
 
     /*
-    * If the user leaves the screen before getMovieList(...) returns a value,
+    * If the user leaves the screen before getList(...) returns a value,
     *  the system calls onCleared and the ViewModel’s CoroutineScope will be canceled.
     *  This will make sure that the movieListData.value will not be modified,
     * and the code will not attempt to update a no longer existing screen.*/

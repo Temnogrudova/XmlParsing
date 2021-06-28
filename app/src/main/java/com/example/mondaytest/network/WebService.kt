@@ -5,7 +5,7 @@ import com.example.mondaytest.models.Feed
 import retrofit2.http.*
 
 interface WebService{
-    @GET("webservice/rss/rssfeeder.asmx/FeederNode")
-    suspend fun getFeed(@Query("iID") iID: String): Feed
+    @GET("/Integration/StoryRss{id}.xml")
+    suspend fun getFeed(@Path("id") id: String): Feed
 }
 

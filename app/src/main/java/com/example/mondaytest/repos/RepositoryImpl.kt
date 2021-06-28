@@ -15,14 +15,14 @@ class RepositoryImpl  @Inject constructor(
     override val cultureLiveData: MutableLiveData<Feed> = MutableLiveData()
 
 
-    override suspend fun fetchFeed(iId: String) {
+    override suspend fun fetchFeed(id: String) {
         val feed = try {
-            webService.getFeed(iId)
+            webService.getFeed(id)
         } catch (cause: Throwable) {
             cause.printStackTrace()
             throw cause
         }
-        when (iId) {
+        when (id) {
             CARS_ID -> {
                 return   feedLiveData.postValue(feed)
             }
@@ -36,8 +36,8 @@ class RepositoryImpl  @Inject constructor(
     }
 
     companion object {
-        const val CARS_ID = "3220"
-        const val SPORTS_ID = "2605"
-        const val CULTURE_ID = "3317"
+        const val CARS_ID = "550"
+        const val SPORTS_ID = "3"
+        const val CULTURE_ID = "538"
     }
 }

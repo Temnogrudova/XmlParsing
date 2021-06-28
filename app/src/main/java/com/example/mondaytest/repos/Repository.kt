@@ -8,5 +8,5 @@ interface Repository {
     val sportLiveData: LiveData<Feed>
     val cultureLiveData: LiveData<Feed>
 
-    suspend fun fetchFeed(iId: String)
+    suspend fun fetchFeed(id: String)
 }

@@ -42,8 +42,7 @@ object OkHttpClientAppModule {
  */
 inline fun <reified T> createWebService(
     okHttpClient: OkHttpClient,
-    url: String,
-    converterFactory: Converter.Factory = SimpleXmlConverterFactory.create()
+    url: String
 ): T {
 
     val retrofit = Retrofit.Builder()
