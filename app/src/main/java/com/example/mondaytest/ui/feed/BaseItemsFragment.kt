@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mondaytest.databinding.FragmentItemsBinding
@@ -20,19 +21,9 @@ abstract class BaseItemsFragment: Fragment() {
     protected val profileViewModel: ProfileViewModel by activityViewModels()
     protected lateinit var binding: FragmentItemsBinding
 
-    private lateinit var mainHandler: Handler
-    private val refreshTask = object : Runnable {
-        override fun run() {
-            refresh()
-            mainHandler.postDelayed(this, TIMEOUT)
-        }
-    }
-
-    var items: ArrayList<Article?> = arrayListOf()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainHandler = Handler(Looper.getMainLooper())
+        lifecycle.addObserver(listViewModel)
     }
 
     override fun onCreateView(
@@ -56,10 +47,13 @@ abstract class BaseItemsFragment: Fragment() {
                     )
             )
             adapter = ItemsListAdapter(
-                    items,
+                    emptyList(),
                     adapterInteractionCallbackImpl
             )
         }
+        listViewModel.showProgressBar.observe(viewLifecycleOwner, showProgressBarLiveDataObserver)
+        listViewModel.refresh.observe(viewLifecycleOwner, refreshLiveDataLiveDataObserver)
+
     }
 
     private val adapterInteractionCallbackImpl = object:
@@ -72,23 +66,15 @@ abstract class BaseItemsFragment: Fragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        mainHandler.removeCallbacks(refreshTask)
+    abstract fun refresh()
+
+    private val showProgressBarLiveDataObserver = Observer<Boolean>{
+        binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
     }
 
-    override fun onResume() {
-        super.onResume()
-        mainHandler.post(refreshTask)
+    private val refreshLiveDataLiveDataObserver = Observer<Boolean>{
+        refresh()
     }
-
-    open fun refresh()
-    {
-        if (this::binding.isInitialized) {
-            binding.progressBar.visibility = View.VISIBLE
-        }
-    }
-
     companion object {
         const val TIMEOUT: Long = 5000
     }

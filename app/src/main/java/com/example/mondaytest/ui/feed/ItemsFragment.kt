@@ -22,8 +22,7 @@ class ItemsFragment : BaseItemsFragment() {
     }
 
     private fun initObserves() {
-        listViewModel.feedLiveData.observe(viewLifecycleOwner, feedLiveDataObserver)
-        listViewModel.errorLiveData.observe(viewLifecycleOwner, errorLiveDataObserver)
+        listViewModel.feedListLiveData.observe(viewLifecycleOwner, feedLiveDataObserver)
     }
 
     override fun onDestroy() {
@@ -32,23 +31,14 @@ class ItemsFragment : BaseItemsFragment() {
     }
 
     private fun removeObservers() {
-        listViewModel.feedLiveData.removeObserver(feedLiveDataObserver)
-        listViewModel.errorLiveData.removeObserver(errorLiveDataObserver)
+        listViewModel.feedListLiveData.removeObserver(feedLiveDataObserver)
     }
 
     override fun refresh() {
-        super.refresh()
         listViewModel.fetchFeed(CARS_ID)
     }
 
     private val feedLiveDataObserver = Observer<List<Article>>{
-        this.items.clear()
-        this.items.addAll(it)
-        binding.rvItems.adapter?.notifyDataSetChanged()
-        binding.progressBar.visibility = View.GONE
-    }
-
-    private val errorLiveDataObserver = Observer<String>{
-        binding.progressBar.visibility = View.GONE
+        (binding.rvItems.adapter as ItemsListAdapter).setData(it)
     }
 }

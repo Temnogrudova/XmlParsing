@@ -16,6 +16,10 @@ class ItemsListAdapter(
     interface InteractionListener {
         fun onItemClick(v: View, feed: Article?)
     }
+    fun setData(items: List<Article?>) {
+        this.items = items
+        notifyDataSetChanged()
+    }
 
     private lateinit var inflater: LayoutInflater
     abstract class BaseViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView)
