@@ -42,8 +42,7 @@ open class ProfileFragment: Fragment() {
             view.findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToFeedFragment())
         }
     }
-
-
+    
     private fun initObserves() {
         profileViewModel.lastSeenFeedTitle.observe(this, lastSeenFeedTitleObserver)
     }

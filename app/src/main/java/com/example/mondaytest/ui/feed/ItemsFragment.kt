@@ -108,7 +108,4 @@ class ItemsFragment(private val position: Int) : Fragment() {
     private val feedLiveDataObserver = Observer<List<Article>>{
         (binding.rvItems.adapter as ItemsListAdapter).setData(it)
     }
-    companion object {
-        const val TIMEOUT: Long = 5000
-    }
 }

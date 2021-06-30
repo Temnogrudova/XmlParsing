@@ -23,25 +23,13 @@ class RepositoryImpl  @Inject constructor(
         _requestState.value = RequestState.InProgress
         try {
             val feed = webService.getFeed(id.value.toString())
-            when (id) {
-                Types.CARS_ID -> {
-                    _requestState.value = RequestState.FeedSuccess(feed)
-                }
-                Types.SPORTS_ID -> {
-                    _requestState.value = RequestState.SportSuccess(feed)
-                }
-                Types.CULTURE_ID -> {
-                    _requestState.value = RequestState.CultureSuccess(feed)
-
-                }
-            }
+            _requestState.value = RequestState.Success(Pair(id, feed))
         } catch (cause: Throwable) {
             cause.printStackTrace()
             throw cause
-            _requestState.value = RequestState.Failed("Exception ${cause.message}")
+            _requestState.value = RequestState.Failed(Pair(id, "Exception ${cause.message}"))
         }
     }
-
 }
 
 enum class Types(val value: Int) {
@@ -53,10 +41,8 @@ enum class Types(val value: Int) {
 sealed class RequestState {
     object NotStarted : RequestState()
     object InProgress: RequestState()
-    data class FeedSuccess(val feed: Feed) : RequestState()
-    data class SportSuccess(val sport: Feed) : RequestState()
-    data class CultureSuccess(val culture: Feed) : RequestState()
-    data class Failed(val errorMessage: String) : RequestState()
+    data class Success(val feedByType: Pair<Types, Feed>) : RequestState()
+    data class Failed(val errorMessageByType: Pair<Types, String>) : RequestState()
 }
 
 

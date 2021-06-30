@@ -24,9 +24,6 @@ class ItemsViewModel  @Inject constructor(
     private val repository: Repository
 ): ViewModel(), LifecycleObserver
 {
-    private var feedList = ArrayList<Article>()
-    private var combinedFeedList = ArrayList<Article>()
-
     private val _showProgressBar = MutableLiveData<Boolean>()
     val showProgressBar: LiveData<Boolean> = _showProgressBar
 
@@ -39,11 +36,14 @@ class ItemsViewModel  @Inject constructor(
     private val _refresh = MutableLiveData<Boolean>()
     val refresh: LiveData<Boolean> = _refresh
 
+    private var feedList = ArrayList<Article>()
+    private var combinedFeedList = ArrayList<Article>()
+
     private lateinit var mainHandler: Handler
     private val refreshTask = object : Runnable {
         override fun run() {
             _refresh.value = true
-            mainHandler.postDelayed(this, ItemsFragment.TIMEOUT)
+            mainHandler.postDelayed(this, TIMEOUT)
         }
     }
 
@@ -75,17 +75,20 @@ class ItemsViewModel  @Inject constructor(
         viewModelScope.launch {
             repository.requestState.collect { requestProgress ->
                 when (requestProgress) {
-                    is RequestState.FeedSuccess -> {
-                        requestProgress.feed.articleList?.let { handleFeedItems(it) }
-                    }
-                    is RequestState.SportSuccess -> {
-                        requestProgress.sport.articleList?.let { handleSportItems(it)}
-                    }
-                    is RequestState.CultureSuccess -> {
-                        requestProgress.culture.articleList?.let { handleCultureFeedItems(it) }
+                    is RequestState.Success -> {
+                        when(requestProgress.feedByType.first)
+                        {
+                            Types.CARS_ID -> requestProgress.feedByType.second.articleList?.let { handleFeedItems(it) }
+                            Types.SPORTS_ID -> requestProgress.feedByType.second.articleList?.let { handleSportFeedItems(it) }
+                            Types.CULTURE_ID -> requestProgress.feedByType.second.articleList?.let { handleCultureFeedItems(it) }
+                        }
                     }
                     is RequestState.Failed -> {
-                        _showProgressBar.value = false
+                        when(requestProgress.errorMessageByType.first)
+                        {
+                            Types.SPORTS_ID -> handleSportError()
+                            else -> _showProgressBar.value = false
+                        }
                     }
                     is RequestState.InProgress -> {
                         _showProgressBar.value = true
@@ -97,6 +100,10 @@ class ItemsViewModel  @Inject constructor(
         }
     }
 
+    private fun handleSportError() {
+        fetchFeed(Types.CULTURE_ID)
+    }
+
     private fun handleFeedItems(items: List<Article>) {
         this.feedList.clear()
         this.feedList.addAll(items)
@@ -104,11 +111,10 @@ class ItemsViewModel  @Inject constructor(
         _showProgressBar.value = false
     }
 
-    private fun handleSportItems(items: List<Article>) {
+    private fun handleSportFeedItems(items: List<Article>) {
         this.combinedFeedList.clear()
         this.combinedFeedList.addAll(items)
         fetchFeed(Types.CULTURE_ID)
-
     }
 
     private fun handleCultureFeedItems(items: List<Article>) {
@@ -131,5 +137,8 @@ class ItemsViewModel  @Inject constructor(
         if (intent.resolveActivity(context.packageManager) != null) {
             context.startActivity(intent)
         }
+    }
+    companion object {
+        const val TIMEOUT: Long = 5000
     }
 }
