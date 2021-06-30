@@ -10,9 +10,8 @@ import android.os.Looper
 import androidx.lifecycle.*
 import com.example.mondaytest.models.Article
 import com.example.mondaytest.repos.Repository
-import com.example.mondaytest.repos.RepositoryImpl
-import com.example.mondaytest.repos.RepositoryImpl.Companion.CULTURE_ID
 import com.example.mondaytest.repos.RequestState
+import com.example.mondaytest.repos.Types
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
@@ -25,10 +24,6 @@ class ItemsViewModel  @Inject constructor(
     private val repository: Repository
 ): ViewModel(), LifecycleObserver
 {
-    /*
-    Map is 1 to 1 mapping which is easy to understand.
-    SwitchMap on the other hand only mapping the most recent value at a time to reduce unnecessary compute.
-     */
     private var feedList = ArrayList<Article>()
     private var combinedFeedList = ArrayList<Article>()
 
@@ -48,11 +43,11 @@ class ItemsViewModel  @Inject constructor(
     private val refreshTask = object : Runnable {
         override fun run() {
             _refresh.value = true
-            mainHandler.postDelayed(this, BaseItemsFragment.TIMEOUT)
+            mainHandler.postDelayed(this, ItemsFragment.TIMEOUT)
         }
     }
 
-    fun fetchFeed(id: String) {
+    fun fetchFeed(id: Types) {
         viewModelScope.launch {
             repository.fetchFeed(id = id)
         }
@@ -62,13 +57,12 @@ class ItemsViewModel  @Inject constructor(
     private fun initView() {
         _refresh.value = true
         mainHandler = Handler(Looper.getMainLooper())
-        observeSearchState()
+        observeRequestState()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     private fun removeRefreshCallbacks() {
         mainHandler.removeCallbacks(refreshTask)
-
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -77,7 +71,7 @@ class ItemsViewModel  @Inject constructor(
 
     }
 
-    private fun observeSearchState() {
+    private fun observeRequestState() {
         viewModelScope.launch {
             repository.requestState.collect { requestProgress ->
                 when (requestProgress) {
@@ -113,7 +107,7 @@ class ItemsViewModel  @Inject constructor(
     private fun handleSportItems(items: List<Article>) {
         this.combinedFeedList.clear()
         this.combinedFeedList.addAll(items)
-        fetchFeed(CULTURE_ID)
+        fetchFeed(Types.CULTURE_ID)
 
     }
 

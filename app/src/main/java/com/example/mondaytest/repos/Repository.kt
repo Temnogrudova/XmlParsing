@@ -7,5 +7,5 @@ interface Repository {
 
     val requestState: StateFlow<RequestState>
 
-    suspend fun fetchFeed(id: String)
+    suspend fun fetchFeed(id: Types)
 }

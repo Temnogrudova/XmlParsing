@@ -19,18 +19,18 @@ class RepositoryImpl  @Inject constructor(
         get() = _requestState
 
 
-    override suspend fun fetchFeed(id: String) = withContext(Dispatchers.IO) {
+    override suspend fun fetchFeed(id: Types) = withContext(Dispatchers.IO) {
         _requestState.value = RequestState.InProgress
         try {
-            val feed = webService.getFeed(id)
+            val feed = webService.getFeed(id.value.toString())
             when (id) {
-                CARS_ID -> {
+                Types.CARS_ID -> {
                     _requestState.value = RequestState.FeedSuccess(feed)
                 }
-                SPORTS_ID -> {
+                Types.SPORTS_ID -> {
                     _requestState.value = RequestState.SportSuccess(feed)
                 }
-                CULTURE_ID -> {
+                Types.CULTURE_ID -> {
                     _requestState.value = RequestState.CultureSuccess(feed)
 
                 }
@@ -42,11 +42,12 @@ class RepositoryImpl  @Inject constructor(
         }
     }
 
-    companion object {
-        const val CARS_ID = "550"
-        const val SPORTS_ID = "3"
-        const val CULTURE_ID = "538"
-    }
+}
+
+enum class Types(val value: Int) {
+    CARS_ID(550),
+    SPORTS_ID(3),
+    CULTURE_ID(538)
 }
 
 sealed class RequestState {

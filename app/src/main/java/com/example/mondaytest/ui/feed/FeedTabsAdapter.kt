@@ -10,10 +10,6 @@ class FeedTabsAdapter(fm: FragmentManager, lifecycle: Lifecycle) : FragmentState
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> ItemsFragment()
-            1 -> CombinedItemsItemsFragment()
-            else -> throw IllegalArgumentException("Unsupported Index")
-        }
+        return ItemsFragment(position)
     }
 }
