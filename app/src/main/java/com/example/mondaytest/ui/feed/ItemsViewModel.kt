@@ -60,6 +60,7 @@ class ItemsViewModel  @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     private fun initView() {
+        _refresh.value = true
         mainHandler = Handler(Looper.getMainLooper())
         observeSearchState()
     }
@@ -69,11 +70,13 @@ class ItemsViewModel  @Inject constructor(
         mainHandler.removeCallbacks(refreshTask)
 
     }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     private fun subscribeOnRefreshCallbacks() {
         mainHandler.post(refreshTask)
 
     }
+
     private fun observeSearchState() {
         viewModelScope.launch {
             repository.requestState.collect { requestProgress ->
